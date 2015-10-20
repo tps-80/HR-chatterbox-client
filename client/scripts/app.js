@@ -9,9 +9,9 @@ var app = {
       context.handleSubmit();
     });
 
-    // setInterval(function() {
+    setInterval(function() {
       context.fetch();
-    // }, 2000);
+    }, 4000);
   },
 
   handleSubmit: function() {
@@ -37,6 +37,7 @@ var app = {
       success: function (data) {
         console.log('chatterbox: Message sent');
         console.log(data);
+        _.extend(message, data);
         context.addMessage(message);
       },
       error: function (data) {
@@ -53,7 +54,7 @@ var app = {
       data: '-createdAt',
       contentType: 'application/json',
       success: function (data) {
-        //iterate over data.results
+        console.log(data);
         for (var i = 0; i < data.results.length; i++) {
 
           if (data.results[i].text) {
@@ -69,7 +70,7 @@ var app = {
           }
 
         }
-        console.log(data);
+        
       },
       error: function (data) {
         console.error('chatterbox: Failed to get messages');
@@ -83,15 +84,17 @@ var app = {
 
   addMessage: function(message){
     var context = this;
-    var msgDiv = $('<div id="chat"></div>');
-    var text = $('<p class="text">' + message.text + '</p>');
-    var user = $('<a class="username">User: ' + message.username + '</a>');
-    user.on('click', function() {
-      context.addFriend(message.username);
-    });
-    msgDiv.append(user);
-    msgDiv.append(text); 
-    $('#chats').prepend(msgDiv);
+    if ($('#' + message.objectId).length === 0) {
+      var msgDiv = $('<div class="chat" id="' + message.objectId + '"></div>');
+      var text = $('<p class="text">' + message.text + '</p>');
+      var user = $('<a class="username">User: ' + message.username + '</a>');
+      user.on('click', function() {
+        context.addFriend(message.username);
+      });
+      msgDiv.append(user);
+      msgDiv.append(text); 
+      $('#chats').prepend(msgDiv);
+    }
   },
 
   addRoom: function(roomName) {
@@ -103,6 +106,10 @@ var app = {
     if (context.friends.indexOf(username) === -1) {
       context.friends.push(username);
     }
+  },
+
+  filterMessages: function(roomName) {
+
   }
 
 };
