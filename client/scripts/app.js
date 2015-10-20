@@ -2,11 +2,17 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   rooms: {},
   friends: [],
-  currentRoom: "default",
+  currentRoom: "global",
   init: function() {
     var context = this;
     $('.submit').on('click', function(){
       context.handleSubmit();
+    });
+
+    $('#roomSelect').change(function() {
+      context.currentRoom = $(this).val();
+      context.clearMessages();
+      context.fetch();
     });
 
     setInterval(function() {
@@ -54,7 +60,10 @@ var app = {
       data: '-createdAt',
       contentType: 'application/json',
       success: function (data) {
-        console.log(data);
+        // console.log(data);
+
+        // default show all messages
+        // if message has a room, only show messages from that room
         for (var i = 0; i < data.results.length; i++) {
 
           if (data.results[i].text) {
@@ -65,8 +74,12 @@ var app = {
                 context.rooms[lowerTmp] = tmp;
                 context.addRoom(tmp);
               }
+              if (context.currentRoom === "global") {
+                context.addMessage(data.results[i]);
+              } else if (context.currentRoom === lowerTmp) {
+                context.addMessage(data.results[i]);
+              }
             }
-            context.addMessage(data.results[i]);
           }
 
         }
@@ -86,7 +99,7 @@ var app = {
     var context = this;
     if ($('#' + message.objectId).length === 0) {
       var msgDiv = $('<div class="chat" id="' + message.objectId + '"></div>');
-      var text = $('<p class="text">' + message.text + '</p>');
+      var text = $('<p class="text">' + _.escape(message.text) + '</p>');
       var user = $('<a class="username">User: ' + message.username + '</a>');
       user.on('click', function() {
         context.addFriend(message.username);
@@ -106,12 +119,7 @@ var app = {
     if (context.friends.indexOf(username) === -1) {
       context.friends.push(username);
     }
-  },
-
-  filterMessages: function(roomName) {
-
   }
-
 };
 
 $('document').ready(function() {app.init();})
