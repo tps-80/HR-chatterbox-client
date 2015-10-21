@@ -60,9 +60,10 @@ form input[type=text] {
 }
 
 .chat {
-    padding: 5px;
-    margin-bottom: 5px;
+    padding: 10px;
+    margin: auto 0 auto;
     background-color: #eee;
+
 }
 
 .chat .username {
@@ -81,4 +82,14 @@ form input[type=text] {
 
 .spinner img {
     padding: 10px;
+}
+
+.roomName {
+    float: right;
+}
+
+.user {
+}
+
+.msgText {
 }

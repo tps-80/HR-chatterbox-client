@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chatterbox</title>
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <!-- dependencies -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <!-- your scripts -->
+    <script src="env/backbone-config.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <h1>chatterbox</h1>
+      <select name="Room" id="roomSelect">
+        <option value="global">Select a Room</option>
+      </select>
+      <input type="textarea" class="msgText"></input>
+      <input type="button" value="Submit" class="submit" id="send"></input>
+    </div>
+    <div id="chats"></div>
+    <script type="text/template" id="messageViewTemplate">
+      <div class="chat">
+        <span class="username"><%- username %>
+        </span><%- text %>
+        <span class="roomName"><%- roomname %></span>
+      </div>
+    </script>
+    <script src="scripts/backbone-app.js"></script>
+  </body>
+</html>
